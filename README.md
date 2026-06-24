@@ -134,19 +134,19 @@ Mock API는 아래 규칙으로 동작합니다.
 1. 의존성 설치
 
 ```bash
-npm install
+pnpm install
 ```
 
 2. 개발 서버 실행
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 3. 빌드
 
 ```bash
-npm run build
+pnpm build
 ```
 
 4. 빌드 결과 확인
