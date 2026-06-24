@@ -1,6 +1,6 @@
 import type { FC } from 'react';
-import { FormField, type FieldRendererProps } from '../components/FormField';
-import type { InputFieldType } from '../types/service';
+import { FormField, type FieldRendererProps } from '@/common/components/FormField';
+import type { InputFieldType } from '@/config/serviceTypes';
 
 /**
  * 입력 타입 → 렌더러 매핑.

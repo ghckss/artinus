@@ -1,7 +1,7 @@
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
-import { App } from './App';
-import { services } from './config/services';
+import { SignupPage } from '@/domains/signup/components/SignupPage';
+import { services } from '@/config/services';
 import './styles.css';
 
 // 공용 엔트리: 각 HTML의 #root[data-service]에서 서비스 이름을 읽어 부트스트랩한다.
@@ -18,6 +18,6 @@ if (!services[serviceName]) {
 
 ReactDOM.createRoot(rootElement).render(
   <StrictMode>
-    <App serviceName={serviceName} />
+    <SignupPage serviceName={serviceName} />
   </StrictMode>
 );

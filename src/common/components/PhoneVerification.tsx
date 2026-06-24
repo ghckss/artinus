@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import type { VerificationStatus } from '../hooks/usePhoneVerification';
+import type { VerificationStatus } from '@/common/hooks/usePhoneVerification';
 
 interface PhoneVerificationProps {
   mobile: string;

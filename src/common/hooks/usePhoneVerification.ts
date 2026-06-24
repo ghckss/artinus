@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { verifyPhoneCode, VerifyResult } from '../api/verify';
+import { verifyPhoneCode, VerifyResult } from '@/common/api/verifyApi';
 
 export type VerificationStatus = 'idle' | 'pending' | 'success' | 'failure' | 'expired';
 

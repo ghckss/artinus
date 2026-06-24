@@ -1,20 +1,20 @@
-import { services } from './config/services';
-import { PageShell } from './components/PageShell';
-import { FormField } from './components/FormField';
-import { fieldRenderers } from './fields/registry';
-import { PhoneVerification } from './components/PhoneVerification';
-import { TermsCheckboxGroup } from './components/TermsCheckboxGroup';
-import { SubmitSection } from './components/SubmitSection';
-import type { SubmitRequirement } from './components/SubmitSection';
-import { useSignupForm } from './hooks/useSignupForm';
-import { usePhoneVerification } from './hooks/usePhoneVerification';
-import { useTermsSync } from './hooks/useTermsSync';
+import { services } from '@/config/services';
+import { PageShell } from '@/common/components/PageShell';
+import { FormField } from '@/common/components/FormField';
+import { fieldRenderers } from '@/common/form/fieldRegistry';
+import { PhoneVerification } from '@/common/components/PhoneVerification';
+import { TermsCheckboxGroup } from '@/common/components/TermsCheckboxGroup';
+import { SubmitSection } from '@/common/components/SubmitSection';
+import type { SubmitRequirement } from '@/common/components/SubmitSection';
+import { useSignupForm } from '@/common/hooks/useSignupForm';
+import { usePhoneVerification } from '@/common/hooks/usePhoneVerification';
+import { useTermsSync } from '@/common/hooks/useTermsSync';
 
-interface AppProps {
+interface SignupPageProps {
   serviceName: string;
 }
 
-export function App({ serviceName }: AppProps) {
+export function SignupPage({ serviceName }: SignupPageProps) {
   const service = services[serviceName] ?? services.community;
   const form = useSignupForm(service.fields);
   const phoneVerification = usePhoneVerification();

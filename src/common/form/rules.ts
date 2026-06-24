@@ -1,4 +1,4 @@
-import type { ValidationRule } from '../types/service';
+import type { ValidationRule } from '@/config/serviceTypes';
 
 /**
  * 재사용 가능한 검증 규칙 모음.

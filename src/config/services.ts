@@ -1,5 +1,5 @@
-import type { InputFieldConfig, PhoneFieldConfig, ServiceConfig } from '../types/service';
-import { matches, minAge, minLength } from '../validation/rules';
+import type { InputFieldConfig, PhoneFieldConfig, ServiceConfig } from './serviceTypes';
+import { matches, minAge, minLength } from '@/common/form/rules';
 
 /**
  * 공통 필드 정의. 서비스 설정에서 재사용하며, 순서는 각 서비스의 fields 배열에서 결정한다.
