@@ -112,3 +112,56 @@ Mock API는 아래 규칙으로 동작합니다.
 - 입력 검증, 오류 안내, 반응형 UI 등 사용자 경험에 대한 고려
 - 문서화 내용(README)
 
+---
+
+## 구현 요약
+
+이 리포지터리는 React + TypeScript(strict)와 Vite를 사용하여 서비스별로 독립된 회원가입 페이지를 구현합니다. 각 서비스는 설정 데이터로 구성되어 있어 새로운 서비스 추가, 입력 항목 변경, 순서 변경, 약관 추가를 최소한의 코드 수정으로 대응할 수 있습니다.
+
+### 주요 구조
+- `src/config/services.ts`: 서비스별 타이틀, 배너, 테마, 입력 필드(순서 포함), 약관을 정의
+- `src/types/service.ts`: 필드/약관/서비스 설정 타입. 입력 필드와 휴대폰 인증을 `type` 판별자로 구분하는 union
+- `src/validation/rules.ts`: `minLength`·`matches`·`minAge`·`pattern` 등 조합 가능한 검증 규칙 모음
+- `src/fields/registry.ts`: 입력 `type → 렌더러` 매핑. 새 입력 타입을 등록 한 줄로 추가
+- `src/App.tsx`: 서비스 설정의 `fields` 순서대로 입력/인증을 렌더링하고 약관·제출 영역을 구성
+- `src/hooks/*`: 폼 상태·검증, 휴대폰 인증 흐름, 약관 동기화 로직을 재사용 가능한 훅으로 분리
+- `src/main.tsx`: 공용 엔트리. `#root[data-service]` 값으로 어떤 서비스를 렌더할지 결정
+- `src/api/verify.ts`: Mock API로 `/api/verify` 인증 규칙을 구현
+- `vite.config.ts`: 루트의 `*.html`을 자동 스캔해 다중 엔트리로 등록 → `community.html`, `news.html`, `shopping.html` 독립 산출물 생성
+
+### 실행 및 빌드 방법
+
+1. 의존성 설치
+
+```bash
+npm install
+```
+
+2. 개발 서버 실행
+
+```bash
+npm run dev
+```
+
+3. 빌드
+
+```bash
+npm run build
+```
+
+4. 빌드 결과 확인
+
+`dist/community.html`, `dist/news.html`, `dist/shopping.html`가 생성됩니다.
+
+### 확장성 설명
+
+- **신규 서비스 추가**: `services.ts`에 설정 객체 1개와 루트에 `<service>.html` 1장만 추가하면 됩니다. HTML은 `#root[data-service="<name>"]`로 서비스를 지정하고 공용 `src/main.tsx`를 로드하므로 서비스별 엔트리 파일이 필요 없고, `vite.config.ts`가 `*.html`을 자동 스캔하므로 빌드 설정도 건드릴 필요가 없습니다.
+- **입력 항목 추가/제거/순서 변경**: `fields` 배열만 수정하면 됩니다. 휴대폰 인증도 `type: 'phone'` 필드로 배열에 포함되므로, 배열 순서만 바꾸면 노출 위치가 바뀝니다(예: 뉴스 서비스는 휴대폰 인증을 가장 먼저 노출).
+- **새 입력 타입 추가**: 전용 렌더러를 만들어 `src/fields/registry.ts`에 등록하면 됩니다. 기존 텍스트 계열(text/password/date/tel/email)은 하나의 렌더러를 공유합니다.
+- **검증 규칙**: `src/validation/rules.ts`의 규칙 함수를 `rules: [minLength(8), ...]`처럼 조합해 선언적으로 구성합니다. 필수 여부(`required`)는 폼 훅이 별도로 처리합니다.
+- **약관 구성**: `terms` 배열로 관리되며, 전체↔개별 동의 동기화와 필수 동의 판정은 공통 훅(`useTermsSync`)에 분리되어 있습니다.
+
+### AI 활용
+
+이 과제에서는 AI 도구를 사용하여 구현 계획을 수립하고 코드 구조를 설계했습니다. 최종 제출물은 AI가 생성한 구조를 기반으로 직접 확인하고 조정했습니다.
+
