@@ -27,6 +27,8 @@ export const minAge = (years: number, message?: string): ValidationRule => (valu
   if (Number.isNaN(birth.getTime())) return '유효한 날짜를 입력해주세요.';
 
   const today = new Date();
+  if (birth.getTime() > today.getTime()) return '유효한 날짜를 입력해주세요.';
+
   let age = today.getFullYear() - birth.getFullYear();
   const monthDiff = today.getMonth() - birth.getMonth();
   if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {

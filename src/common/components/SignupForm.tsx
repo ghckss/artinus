@@ -58,6 +58,8 @@ export function SignupForm({ service }: SignupFormProps) {
                 error={phoneVerification.error}
                 countdown={phoneVerification.countdown}
                 isRequesting={phoneVerification.isRequesting}
+                canRequest={phoneVerification.canRequestCode}
+                mobileValid={phoneVerification.isValidMobile}
                 onMobileChange={phoneVerification.setMobile}
                 onCodeChange={phoneVerification.setCode}
                 onRequestCode={phoneVerification.requestCode}

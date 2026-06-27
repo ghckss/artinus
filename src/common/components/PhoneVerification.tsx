@@ -8,6 +8,8 @@ interface PhoneVerificationProps {
   error: string | null;
   countdown: number;
   isRequesting: boolean;
+  canRequest: boolean;
+  mobileValid: boolean;
   onMobileChange: (value: string) => void;
   onCodeChange: (value: string) => void;
   onRequestCode: () => void;
@@ -35,6 +37,8 @@ export const PhoneVerification: FC<PhoneVerificationProps> = ({
   error,
   countdown,
   isRequesting,
+  canRequest,
+  mobileValid,
   onMobileChange,
   onCodeChange,
   onRequestCode,
@@ -42,7 +46,7 @@ export const PhoneVerification: FC<PhoneVerificationProps> = ({
 }) => {
   const isVerified = status === 'success';
   const isCodeStage = status === 'pending';
-  const canRequest = !isVerified && !isRequesting && status !== 'pending' && mobile.trim().length > 0;
+  const showMobileError = mobile.length > 0 && !mobileValid && !isVerified;
 
   return (
     <section className="phone-verification form-section" aria-labelledby="phone-heading">
@@ -62,15 +66,22 @@ export const PhoneVerification: FC<PhoneVerificationProps> = ({
             id="mobile"
             type="tel"
             inputMode="numeric"
+            maxLength={11}
             placeholder="01012345678"
             value={mobile}
             disabled={isVerified}
+            aria-invalid={showMobileError}
             onChange={(event) => onMobileChange(event.target.value)}
           />
           <button type="button" className="btn-secondary" onClick={onRequestCode} disabled={!canRequest}>
             {status === 'idle' ? '인증번호 받기' : isVerified ? '인증 완료' : '재요청'}
           </button>
         </div>
+        {showMobileError ? (
+          <p className="field-error" role="alert">
+            휴대폰 번호를 정확히 입력해주세요. (예: 01012345678)
+          </p>
+        ) : null}
       </div>
 
       <div className="code-field">

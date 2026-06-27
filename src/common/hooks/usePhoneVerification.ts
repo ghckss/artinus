@@ -4,8 +4,8 @@ import { verifyPhoneCode, VerifyResult } from '@/common/api/verifyApi';
 export type VerificationStatus = 'idle' | 'pending' | 'success' | 'failure' | 'expired';
 
 export function usePhoneVerification() {
-  const [mobile, setMobile] = useState('');
-  const [code, setCode] = useState('');
+  const [mobile, setMobileRaw] = useState('');
+  const [code, setCodeRaw] = useState('');
   const [status, setStatus] = useState<VerificationStatus>('idle');
   const [error, setError] = useState<string | null>(null);
   const [countdown, setCountdown] = useState(0);
@@ -26,9 +26,20 @@ export function usePhoneVerification() {
     }
   }, [countdown, status]);
 
+  // 숫자만 입력받고 길이를 제한한다. 키패드 힌트(inputMode)만으로는 비숫자 입력을 막지 못한다.
+  const setMobile = useCallback((value: string) => {
+    setMobileRaw(value.replace(/\D/g, '').slice(0, 11));
+  }, []);
+  const setCode = useCallback((value: string) => {
+    setCodeRaw(value.replace(/\D/g, '').slice(0, 6));
+  }, []);
+
+  // 국내 휴대폰 형식: 01X로 시작하는 10~11자리.
+  const isValidMobile = useMemo(() => /^01\d{8,9}$/.test(mobile), [mobile]);
+
   const canRequestCode = useMemo(
-    () => mobile.trim().length > 0 && !isRequesting && status !== 'pending',
-    [mobile, isRequesting, status]
+    () => isValidMobile && !isRequesting && status !== 'pending' && status !== 'success',
+    [isValidMobile, isRequesting, status]
   );
 
   const requestCode = useCallback(() => {
@@ -67,7 +78,7 @@ export function usePhoneVerification() {
   const reset = useCallback(() => {
     setStatus('idle');
     setError(null);
-    setCode('');
+    setCodeRaw('');
     setCountdown(0);
     setIsRequesting(false);
   }, []);
@@ -84,6 +95,7 @@ export function usePhoneVerification() {
     requestCode,
     verifyCode,
     reset,
-    canRequestCode
+    canRequestCode,
+    isValidMobile
   };
 }
