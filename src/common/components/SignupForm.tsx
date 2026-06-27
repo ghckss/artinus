@@ -1,4 +1,3 @@
-import { services } from '@/config/services';
 import { PageShell } from '@/common/components/PageShell';
 import { FormField } from '@/common/components/FormField';
 import { fieldRenderers } from '@/common/form/fieldRegistry';
@@ -9,13 +8,17 @@ import type { SubmitRequirement } from '@/common/components/SubmitSection';
 import { useSignupForm } from '@/common/hooks/useSignupForm';
 import { usePhoneVerification } from '@/common/hooks/usePhoneVerification';
 import { useTermsSync } from '@/common/hooks/useTermsSync';
+import type { ServiceConfig } from '@/config/serviceTypes';
 
-interface SignupPageProps {
-  serviceName: string;
+interface SignupFormProps {
+  service: ServiceConfig;
 }
 
-export function SignupPage({ serviceName }: SignupPageProps) {
-  const service = services[serviceName] ?? services.community;
+/**
+ * 도메인 공통 회원가입 폼. 각 도메인 페이지가 자신의 ServiceConfig를 주입해 재사용한다.
+ * 필드/약관/테마는 전적으로 config가 결정하므로, 화면 차이는 페이지가 아닌 설정으로 표현한다.
+ */
+export function SignupForm({ service }: SignupFormProps) {
   const form = useSignupForm(service.fields);
   const phoneVerification = usePhoneVerification();
   const { termState, requiredChecked, allChecked, toggleTerm, toggleAll } = useTermsSync(service.terms);
