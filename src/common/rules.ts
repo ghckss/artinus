@@ -1,4 +1,5 @@
-import type { ValidationRule } from '@/config/serviceTypes';
+/** 입력값 검증 규칙. 여러 규칙을 조합해 필드 검증을 선언적으로 구성한다. */
+export type ValidationRule = (value: string, values: Record<string, string>) => string | null;
 
 /**
  * 재사용 가능한 검증 규칙 모음.

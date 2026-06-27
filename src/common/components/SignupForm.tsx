@@ -1,6 +1,5 @@
 import { PageShell } from '@/common/components/PageShell';
 import { FormField } from '@/common/components/FormField';
-import { fieldRenderers } from '@/common/form/fieldRegistry';
 import { PhoneVerification } from '@/common/components/PhoneVerification';
 import { TermsCheckboxGroup } from '@/common/components/TermsCheckboxGroup';
 import { SubmitSection } from '@/common/components/SubmitSection';
@@ -8,7 +7,7 @@ import type { SubmitRequirement } from '@/common/components/SubmitSection';
 import { useSignupForm } from '@/common/hooks/useSignupForm';
 import { usePhoneVerification } from '@/common/hooks/usePhoneVerification';
 import { useTermsSync } from '@/common/hooks/useTermsSync';
-import type { ServiceConfig } from '@/config/serviceTypes';
+import type { ServiceConfig } from '@/common/Types';
 
 interface SignupFormProps {
   service: ServiceConfig;
@@ -68,9 +67,8 @@ export function SignupForm({ service }: SignupFormProps) {
             );
           }
 
-          const Renderer = fieldRenderers[field.type] ?? FormField;
           return (
-            <Renderer
+            <FormField
               key={field.key}
               field={field}
               value={form.values[field.key] ?? ''}

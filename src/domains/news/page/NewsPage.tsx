@@ -1,6 +1,6 @@
 import { SignupForm } from '@/common/components/SignupForm';
-import type { ServiceConfig } from '@/config/serviceTypes';
-import { matches, minLength } from '@/common/form/rules';
+import type { ServiceConfig } from '@/common/Types';
+import { matches, minLength } from '@/common/rules';
 
 /** 뉴스 구독 도메인 회원가입 설정. 휴대폰 인증을 가장 먼저 노출한다. */
 const newsService: ServiceConfig = {

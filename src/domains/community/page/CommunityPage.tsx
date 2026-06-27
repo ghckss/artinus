@@ -1,6 +1,6 @@
 import { SignupForm } from '@/common/components/SignupForm';
-import type { ServiceConfig } from '@/config/serviceTypes';
-import { matches, minLength } from '@/common/form/rules';
+import type { ServiceConfig } from '@/common/Types';
+import { matches, minLength } from '@/common/rules';
 
 /** 커뮤니티 도메인 회원가입 설정. */
 const communityService: ServiceConfig = {

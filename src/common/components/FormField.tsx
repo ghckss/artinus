@@ -1,4 +1,4 @@
-import type { InputFieldConfig } from '@/config/serviceTypes';
+import type { InputFieldConfig } from '@/common/Types';
 
 export interface FieldRendererProps {
   field: InputFieldConfig;

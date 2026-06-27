@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import type { FieldConfig, InputFieldConfig } from '@/config/serviceTypes';
+import type { FieldConfig, InputFieldConfig } from '@/common/Types';
 
 export type FormState = Record<string, string>;
 export type FormErrors = Record<string, string | null>;

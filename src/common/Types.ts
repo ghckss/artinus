@@ -1,7 +1,6 @@
-/** 입력값 검증 규칙. 여러 규칙을 조합해 필드 검증을 선언적으로 구성한다. */
-export type ValidationRule = (value: string, values: Record<string, string>) => string | null;
+import type { ValidationRule } from '@/common/rules';
 
-/** 일반 입력 필드 타입. 새 타입은 fields 렌더러 레지스트리에 등록하면 추가된다. */
+/** 일반 입력 필드 타입. */
 export type InputFieldType = 'text' | 'password' | 'date' | 'tel' | 'email';
 
 export interface InputFieldConfig {

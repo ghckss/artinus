@@ -1,4 +1,4 @@
-import type { TermConfig } from '@/config/serviceTypes';
+import type { TermConfig } from '@/common/Types';
 
 interface TermsCheckboxGroupProps {
   terms: TermConfig[];

@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
-import type { TermConfig } from '@/config/serviceTypes';
+import type { TermConfig } from '@/common/Types';
 
 export function useTermsSync(terms: TermConfig[]) {
   const initialState = useMemo(
