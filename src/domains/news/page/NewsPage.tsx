@@ -1,4 +1,12 @@
-import { SignupForm } from '@/common/components/SignupForm';
+import { PageLayout } from '@/common/components/PageLayout';
+import { FormField } from '@/common/components/FormField';
+import { PhoneVerification } from '@/common/components/PhoneVerification';
+import { TermsCheckboxGroup } from '@/common/components/TermsCheckboxGroup';
+import { SubmitSection } from '@/common/components/SubmitSection';
+import type { SubmitRequirement } from '@/common/components/SubmitSection';
+import { useSignupForm } from '@/common/hooks/useSignupForm';
+import { usePhoneVerification } from '@/common/hooks/usePhoneVerification';
+import { useTermsSync } from '@/common/hooks/useTermsSync';
 import type { ServiceConfig } from '@/common/Types';
 import { matches, minLength } from '@/common/rules';
 
@@ -35,7 +43,78 @@ const newsService: ServiceConfig = {
   ]
 };
 
-/** 뉴스 구독 도메인 회원가입 페이지. */
+/** 뉴스 구독 도메인 회원가입 페이지. 공통 컴포넌트/훅을 직접 조합한다. */
 export function NewsPage() {
-  return <SignupForm service={newsService} />;
+  const service = newsService;
+  const form = useSignupForm(service.fields);
+  const phone = usePhoneVerification();
+  const { termState, requiredChecked, allChecked, toggleTerm, toggleAll } = useTermsSync(service.terms);
+
+  const hasPhoneField = service.fields.some((field) => field.type === 'phone');
+  const phoneVerified = !hasPhoneField || phone.status === 'success';
+  const isFormValid = form.isValid && phoneVerified && requiredChecked;
+
+  const requirements: SubmitRequirement[] = [
+    { label: '필수 입력 항목 작성', done: form.isValid },
+    ...(hasPhoneField ? [{ label: '휴대폰 인증 완료', done: phoneVerified }] : []),
+    { label: '필수 약관 동의', done: requiredChecked }
+  ];
+
+  const handleSubmit = () => {
+    if (!form.validate()) return;
+    if (!isFormValid) return;
+    window.alert('가입 조건을 모두 충족했습니다. 실제 가입 처리는 구현되지 않았습니다.');
+  };
+
+  return (
+    <PageLayout
+      title={service.title}
+      bannerText={service.bannerText}
+      bannerIcon={service.bannerIcon}
+      themeColor={service.themeColor}
+    >
+      <form className="signup-form" onSubmit={(event) => event.preventDefault()}>
+        {service.fields.map((field) => {
+          if (field.type === 'phone') {
+            return (
+              <PhoneVerification
+                key={field.key}
+                mobile={phone.mobile}
+                code={phone.code}
+                status={phone.status}
+                error={phone.error}
+                countdown={phone.countdown}
+                isRequesting={phone.isRequesting}
+                canRequest={phone.canRequestCode}
+                mobileValid={phone.isValidMobile}
+                onMobileChange={phone.setMobile}
+                onCodeChange={phone.setCode}
+                onRequestCode={phone.requestCode}
+                onVerifyCode={phone.verifyCode}
+              />
+            );
+          }
+
+          return (
+            <FormField
+              key={field.key}
+              field={field}
+              value={form.values[field.key] ?? ''}
+              error={form.getFieldError(field.key)}
+              onChange={(value) => form.updateField(field.key, value)}
+              onBlur={() => form.validateField(field.key)}
+            />
+          );
+        })}
+        <TermsCheckboxGroup
+          terms={service.terms}
+          termState={termState}
+          allChecked={allChecked}
+          onToggleTerm={toggleTerm}
+          onToggleAll={toggleAll}
+        />
+        <SubmitSection canSubmit={isFormValid} requirements={requirements} onSubmit={handleSubmit} />
+      </form>
+    </PageLayout>
+  );
 }

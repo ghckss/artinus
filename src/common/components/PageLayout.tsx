@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-interface PageShellProps {
+interface PageLayoutProps {
   title: string;
   bannerText: string;
   bannerIcon?: string;
@@ -8,7 +8,7 @@ interface PageShellProps {
   children: ReactNode;
 }
 
-export function PageShell({ title, bannerText, bannerIcon, themeColor, children }: PageShellProps) {
+export function PageLayout({ title, bannerText, bannerIcon, themeColor, children }: PageLayoutProps) {
   return (
     <div className="page-shell" style={{ '--theme-color': themeColor } as React.CSSProperties}>
       <header className="page-header">
